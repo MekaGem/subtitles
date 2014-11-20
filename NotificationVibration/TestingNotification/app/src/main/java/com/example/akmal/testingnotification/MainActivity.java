@@ -1,15 +1,20 @@
 package com.example.akmal.testingnotification;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import ru.yandex.speechkit.SpeechKit;
+
 
 public class MainActivity extends Activity {
     VibratorExecutor vibrator;
+    boolean isListeting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,16 +22,27 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         vibrator = new VibratorExecutor(this);
+        SpeechKit.getInstance().configure(getBaseContext(),
+                "57a557e3-45f4-4533-acac-8b8907c53985");
 
+        final Context context = this;
         final Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                vibrator.activateVibrator();
+                if (isListeting)
+                {
+                    stopService(new Intent(context, ListenerService.class));
+                    isListeting = false;
+                }
+                else
+                {
+                    startService(new Intent(context, ListenerService.class));
+                    isListeting = true;
+                }
             }
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,4 +65,12 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        stopService(new Intent(this, ListenerService.class));
+    }
+
 }

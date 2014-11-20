@@ -10,8 +10,13 @@ import android.util.Log;
 
 public class VibratorExecutor
 {
+    public static long[] pattern = {0, 500, 300, 300, 200,
+            500, 300, 300, 200,
+            500, 300, 300, 200,
+            500, 300, 300, 200,
+            500, 300, 300, 200};
+
     private Vibrator vibrator;
-    private long[] pattern = {0, 500, 300, 400, 300, 300, 300};
     private boolean turnedOff = true;
 
     public VibratorExecutor(Context context)
