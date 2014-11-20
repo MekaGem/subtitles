@@ -1,6 +1,7 @@
 package com.github.subtitles.view;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.github.subtitles.R;
 
-public class MessagesAdapter extends ArrayAdapter<String> {
+public class MessagesAdapter extends ArrayAdapter<ChatMessageModel> {
     protected LayoutInflater inflater;
 
     public MessagesAdapter(Context context) {
-        super(context, R.layout.message, new String[]{});
+        super(context, R.layout.message);
         inflater = LayoutInflater.from(context);
     }
 
@@ -39,8 +40,13 @@ public class MessagesAdapter extends ArrayAdapter<String> {
             holder = (MessageHolder) convertView.getTag();
         }
 
-        String text = getItem(position);
-        holder.textView.setText(text);
+        ChatMessageModel model = getItem(position);
+        holder.textView.setText(model.getMessage());
+        if (model.isUserMessage()) {
+            holder.textView.setGravity(Gravity.RIGHT);
+        } else {
+            holder.textView.setGravity(Gravity.LEFT);
+        }
         return convertView;
     }
 }
