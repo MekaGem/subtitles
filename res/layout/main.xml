@@ -22,6 +22,10 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
             android:background="@color/menu"/>
-            <!--android:drawableTop="@drawable/ic_launcher"-->
-            <!--android:drawablePadding="0dp"/>-->
+
+    <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Режим активации"
+            android:id="@+id/switcher"/>
 </LinearLayout>
