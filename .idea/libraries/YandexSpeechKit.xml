@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="YandexSpeechKit">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/YandexSpeechKit-2.2-android/YandexSpeechKit/libs/YandexSpeechKit.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
