@@ -79,7 +79,7 @@ public class MainScreen extends Activity {
     }
 
     private void initSpeechKit() {
-        SpeechKit.getInstance().configure(getBaseContext(), "57a557e3-45f4-4533-acac-8b8907c53985");
+        SpeechKit.getInstance().configure(getBaseContext(), "57a557e3-45f4-4533-acac-8b8907c53985", null);
     }
 
     @Override
