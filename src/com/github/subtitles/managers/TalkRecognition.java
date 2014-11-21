@@ -47,7 +47,12 @@ public class TalkRecognition {
 
             @Override
             public void onPartialResults(Recognizer recognizer, Recognition recognition, boolean b) {
-
+                if (b) {
+                    String message = recognition.getBestResultText();
+                    if (!message.isEmpty()) {
+                        chat.addMessage(message);
+                    }
+                }
             }
 
             @Override
@@ -56,16 +61,16 @@ public class TalkRecognition {
                 if (!message.isEmpty()) {
                     chat.addMessage(message);
                 }
-                start();
+            //    start();
             }
 
             @Override
             public void onError(Recognizer recognizer, ru.yandex.speechkit.Error error) {
 //                chat.addMessage("ERROR");
             }
-        }, false);
+        }, true);
 
-        recognizer.setVADEnabled(true);
+        recognizer.setVADEnabled(false);
         recognizer.start();
     }
 

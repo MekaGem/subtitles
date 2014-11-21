@@ -44,8 +44,10 @@ public class MessagesAdapter extends ArrayAdapter<ChatMessageModel> {
         holder.textView.setText(model.getMessage());
         if (model.isUserMessage()) {
             holder.textView.setGravity(Gravity.RIGHT);
+            holder.textView.setBackgroundResource(R.color.user_message);
         } else {
             holder.textView.setGravity(Gravity.LEFT);
+            holder.textView.setBackgroundResource(R.color.interlocutor_message);
         }
         return convertView;
     }

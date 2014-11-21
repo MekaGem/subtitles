@@ -1,13 +1,13 @@
 package com.github.subtitles;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.*;
 import com.github.subtitles.managers.TalkRecognition;
 import com.github.subtitles.view.ChatMessageModel;
+import com.github.subtitles.view.FullScreenTextView;
 import com.github.subtitles.view.MessagesAdapter;
 
 import java.util.ArrayList;
@@ -28,6 +28,16 @@ public class ChatScreen extends Activity {
         final ListView listView = (ListView) findViewById(R.id.messages);
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView) view.findViewById(R.id.message);
+                Intent intent = new Intent(ChatScreen.this, FullScreenTextView.class);
+                intent.putExtra(Intent.EXTRA_TEXT, textView.getText());
+                startActivity(intent);
+            }
+        });
 
         final Button startListening = (Button) findViewById(R.id.button);
         startListening.setOnClickListener(new View.OnClickListener() {
@@ -50,13 +60,16 @@ public class ChatScreen extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatMessageModel model = new ChatMessageModel();
-                model.setMessage(String.valueOf(textField.getText()));
-                model.setUserMessage(true);
-                textField.setText("");
+                String message = String.valueOf(textField.getText());
+                if (!message.isEmpty()) {
+                    ChatMessageModel model = new ChatMessageModel();
+                    model.setMessage(message);
+                    model.setUserMessage(true);
+                    textField.setText("");
 
-                adapter.add(model);
-                adapter.notifyDataSetChanged();
+                    adapter.add(model);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
 
@@ -81,7 +94,9 @@ public class ChatScreen extends Activity {
 
     @Override
     public void onPause() {
-        recognition.stop();
+        if (isListening) {
+            recognition.stop();
+        }
         super.onPause();
     }
 }
