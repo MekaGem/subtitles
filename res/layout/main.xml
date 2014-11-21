@@ -7,13 +7,21 @@
               android:background="@color/background"
               android:gravity="center_vertical|center_horizontal">
 
+    <ListView
+            android:id="@+id/dialogs"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:transcriptMode="alwaysScroll"/>
+
     <Button
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Начать диалог"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/menu"
-            android:textSize="20pt"
-            android:background="@drawable/circle_button"/>
+            android:textColor="@color/white"
+            android:background="@color/menu"/>
+            <!--android:drawableTop="@drawable/ic_launcher"-->
+            <!--android:drawablePadding="0dp"/>-->
 </LinearLayout>
