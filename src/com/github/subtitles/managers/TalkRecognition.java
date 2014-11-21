@@ -52,7 +52,10 @@ public class TalkRecognition {
 
             @Override
             public void onRecognitionDone(Recognizer recognizer, Recognition recognition) {
-                chat.addMessage(recognition.getBestResultText());
+                String message = recognition.getBestResultText();
+                if (!message.isEmpty()) {
+                    chat.addMessage(message);
+                }
                 start();
             }
 

@@ -52,30 +52,24 @@ public class MainScreen extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    String[] assets = getAssets().list("model");
-                    Log.i("ASSETS", Arrays.toString(assets));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                Intent intent = new Intent(MainScreen.this, ChatScreen.class);
-//                startActivity(intent);
+                Intent intent = new Intent(MainScreen.this, ChatScreen.class);
+                startActivity(intent);
             }
         });
 
-        Switch switcher = (Switch) findViewById(R.id.switcher);
-        switcher.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (isListening) {
-                    stopService(new Intent(MainScreen.this, ListenerService.class));
-                    isListening = false;
-                } else {
-                    System.out.println("SDS");
-                    startService(new Intent(MainScreen.this, ListenerService.class));
-                    isListening = true;
-                }
-            }
-        });
+//        Switch switcher = (Switch) findViewById(R.id.switcher);
+//        switcher.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                if (isListening) {
+//                    stopService(new Intent(MainScreen.this, ListenerService.class));
+//                    isListening = false;
+//                } else {
+//                    System.out.println("SDS");
+//                    startService(new Intent(MainScreen.this, ListenerService.class));
+//                    isListening = true;
+//                }
+//            }
+//        });
     }
 
     private void initSpeechKit() {

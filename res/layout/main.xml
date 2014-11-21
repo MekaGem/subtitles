@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/background"
+              android:background="@color/back_color"
               android:gravity="center_vertical|center_horizontal">
 
     <ListView
@@ -22,10 +22,4 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
             android:background="@color/menu"/>
-
-    <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Режим активации"
-            android:id="@+id/switcher"/>
 </LinearLayout>

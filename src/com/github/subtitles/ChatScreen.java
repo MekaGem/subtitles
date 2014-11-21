@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import com.github.subtitles.managers.TalkRecognition;
 import com.github.subtitles.view.ChatMessageModel;
@@ -28,25 +29,37 @@ public class ChatScreen extends Activity {
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button startListening = (Button) findViewById(R.id.button);
+        startListening.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ChatMessageModel model = new ChatMessageModel();
-//                model.setMessage("some message");
-//                model.setUserMessage(adapter.getCount() % 2 == 0);
-//
-//                adapter.add(model);
-//                adapter.notifyDataSetChanged();
                 if (isListening) {
+                    startListening.setText(getString(R.string.start_recording));
                     isListening = false;
                     recognition.stop();
                 } else {
+                    startListening.setText(getString(R.string.stop_recording));
                     isListening = true;
                     recognition.start();
                 }
             }
         });
+
+        final EditText textField = (EditText) findViewById(R.id.typed_message);
+        final Button submit = (Button) findViewById(R.id.submit);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatMessageModel model = new ChatMessageModel();
+                model.setMessage(String.valueOf(textField.getText()));
+                model.setUserMessage(true);
+                textField.setText("");
+
+                adapter.add(model);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     public void addMessage(String message) {
