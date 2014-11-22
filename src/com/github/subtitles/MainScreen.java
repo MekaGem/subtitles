@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -26,6 +27,20 @@ import java.util.Date;
 
 public class MainScreen extends Activity {
     private boolean isListening = false;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.settings_button) {
+            if (isListening) {
+                stopService(new Intent(MainScreen.this, ListenerService.class));
+                isListening = false;
+            } else {
+                startService(new Intent(MainScreen.this, ListenerService.class));
+                isListening = true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,8 @@ public class MainScreen extends Activity {
                 startActivity(intent);
             }
         });
+
+
 
 //        Switch switcher = (Switch) findViewById(R.id.switcher);
 //        switcher.setOnClickListener(new View.OnClickListener() {
