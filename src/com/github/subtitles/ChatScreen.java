@@ -84,6 +84,22 @@ public class ChatScreen extends Activity {
         adapter.notifyDataSetChanged();
     }
 
+    public void rewriteLastMessage(String message) {
+        ChatMessageModel lastMessage = adapter.getItem(adapter.getCount() - 1);
+        lastMessage.setMessage(message);
+        lastMessage.setUserMessage(false);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public void appendToLastMessage(String message) {
+        ChatMessageModel lastMessage = adapter.getItem(adapter.getCount() - 1);
+        lastMessage.setMessage(lastMessage.getMessage() + message);
+        lastMessage.setUserMessage(false);
+
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onResume() {
         if (isListening) {

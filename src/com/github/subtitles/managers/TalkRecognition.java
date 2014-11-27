@@ -23,12 +23,10 @@ public class TalkRecognition {
         recognizer = Recognizer.create("ru-RU", "freeform", new RecognizerListener() {
             @Override
             public void onRecordingBegin(Recognizer recognizer) {
-
             }
 
             @Override
             public void onSpeechDetected(Recognizer recognizer) {
-
             }
 
             @Override
@@ -46,11 +44,14 @@ public class TalkRecognition {
             }
 
             @Override
-            public void onPartialResults(Recognizer recognizer, Recognition recognition, boolean b) {
-                if (b) {
-                    String message = recognition.getBestResultText();
-                    if (!message.isEmpty()) {
-                        chat.addMessage(message);
+            public void onPartialResults(Recognizer recognizer, Recognition recognition, boolean isEndOfUtterance) {
+                String message = recognition.getBestResultText();
+                if (!message.isEmpty()) {
+                    if (isEndOfUtterance) {
+                        chat.rewriteLastMessage(message);
+                        chat.addMessage("...");
+                    } else {
+                        chat.rewriteLastMessage(message + "...");
                     }
                 }
             }
@@ -59,9 +60,7 @@ public class TalkRecognition {
             public void onRecognitionDone(Recognizer recognizer, Recognition recognition) {
                 String message = recognition.getBestResultText();
                 if (!message.isEmpty()) {
-                    chat.addMessage(message);
                 }
-            //    start();
             }
 
             @Override
@@ -72,10 +71,11 @@ public class TalkRecognition {
 
         recognizer.setVADEnabled(false);
         recognizer.start();
+        chat.addMessage("...");
     }
 
     public void stop() {
         recognizer.finishRecording();
-        recognizer.cancel();
+     //   recognizer.cancel();
     }
 }

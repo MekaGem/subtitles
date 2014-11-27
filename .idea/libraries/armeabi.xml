@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="armeabi">
+    <CLASSES />
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$USER_HOME$/Downloads/YandexSpeechKit-2.2-android/YandexSpeechKit/libs/armeabi" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>
