@@ -16,7 +16,7 @@ import com.github.subtitles.view.ChatMessageModel;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
 import com.github.subtitles.view.MessagesAdapter;
-import ru.yandex.speechkit.SpeechKit;
+import ru.yandex.speechkit.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -91,6 +91,24 @@ public class MainScreen extends Activity {
 
     private void initSpeechKit() {
         SpeechKit.getInstance().configure(getBaseContext(), "57a557e3-45f4-4533-acac-8b8907c53985", null);
+        SpeechKit.getInstance().setParameter(SpeechKit.Parameters.soundFormat, SpeechKit.Parameters.SoundFormats.pcmIfWifi);
+        Initializer initializer = Initializer.create(new InitializerListener()  {
+            @Override
+            public void onInitializerBegin(Initializer initializer) {
+
+            }
+
+            @Override
+            public void onError(Initializer initializer, ru.yandex.speechkit.Error error) {
+
+            }
+
+            @Override
+            public void onInitializerDone(Initializer initializer) {
+                // SpeechKit ready
+            }
+        });
+        initializer.start();
     }
 
     @Override

@@ -58,14 +58,10 @@ public class TalkRecognition {
 
             @Override
             public void onRecognitionDone(Recognizer recognizer, Recognition recognition) {
-                String message = recognition.getBestResultText();
-                if (!message.isEmpty()) {
-                }
             }
 
             @Override
             public void onError(Recognizer recognizer, ru.yandex.speechkit.Error error) {
-//                chat.addMessage("ERROR");
             }
         }, true);
 
@@ -76,6 +72,5 @@ public class TalkRecognition {
 
     public void stop() {
         recognizer.finishRecording();
-     //   recognizer.cancel();
     }
 }
