@@ -33,6 +33,7 @@ public class EmptyDialogScreen extends Activity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                finish();
             }
         });
         ad.setNegativeButton("Создать диалог", new DialogInterface.OnClickListener() {
@@ -42,6 +43,7 @@ public class EmptyDialogScreen extends Activity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
+                finish();
             }
         });
         ad.setCancelable(false);
