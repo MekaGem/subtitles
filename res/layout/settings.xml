@@ -4,10 +4,5 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@color/back_color">
-    <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Режим активации"
-            android:id="@+id/switcher"/>
+              android:background="#6D00DA">
 </LinearLayout>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="YandexSpeechKit">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../YandexSpeechKit/libs/YandexSpeechKit.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

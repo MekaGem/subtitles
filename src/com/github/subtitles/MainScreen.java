@@ -3,30 +3,23 @@ package com.github.subtitles;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Switch;
 import com.github.subtitles.managers.ListenerService;
-import com.github.subtitles.view.ChatMessageModel;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
-import com.github.subtitles.view.MessagesAdapter;
 import ru.yandex.speechkit.SpeechKit;
 
-import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 public class MainScreen extends Activity {
     private boolean isListening = false;
+    Menu menu;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -34,9 +27,11 @@ public class MainScreen extends Activity {
             if (isListening) {
                 stopService(new Intent(MainScreen.this, ListenerService.class));
                 isListening = false;
+                item.setTitle("Голосовая активация отключена");
             } else {
                 startService(new Intent(MainScreen.this, ListenerService.class));
                 isListening = true;
+                item.setTitle("Голосовая активация включена");
             }
         }
         return super.onOptionsItemSelected(item);
@@ -72,21 +67,6 @@ public class MainScreen extends Activity {
             }
         });
 
-
-
-//        Switch switcher = (Switch) findViewById(R.id.switcher);
-//        switcher.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                if (isListening) {
-//                    stopService(new Intent(MainScreen.this, ListenerService.class));
-//                    isListening = false;
-//                } else {
-//                    System.out.println("SDS");
-//                    startService(new Intent(MainScreen.this, ListenerService.class));
-//                    isListening = true;
-//                }
-//            }
-//        });
     }
 
     private void initSpeechKit() {
@@ -95,6 +75,7 @@ public class MainScreen extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);

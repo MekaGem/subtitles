@@ -1,10 +1,9 @@
 package com.github.subtitles.managers;
 
-import android.util.Log;
-
 import com.github.subtitles.ChatScreen;
-
-import ru.yandex.speechkit.*;
+import ru.yandex.speechkit.Recognition;
+import ru.yandex.speechkit.Recognizer;
+import ru.yandex.speechkit.RecognizerListener;
 
 /**
  * Created by Akmal on 20.11.2014.

@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
-
+import android.graphics.Color;
+import android.os.PowerManager;
 import com.github.subtitles.R;
 
 /**
  * Created by Akmal on 20.11.2014.
  */
+
 public class NotificationController
 {
     private static final int NOTIFY_ID = 1;
@@ -37,26 +39,39 @@ public class NotificationController
                 NOTIFY_ID, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        NotificationManager nm = (NotificationManager) context
+        NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         Resources res = context.getResources();
         Notification.Builder builder = new Notification.Builder(context);
 
         builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_launcher))
-                .setTicker("К вам обратились! Обращение: " + command)
+                .setSmallIcon(R.drawable.newest)
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.newest))
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
                 .setContentTitle("Напоминание")
-                .setContentText("К вам только что обратились! Обращение: " + command);
+                .setContentText("К вам только что обратились! Обращение: " + command)
+                .setTicker("К вам обратились! Обращение: " + command);
 
-        Notification n = builder.getNotification();
-        n.vibrate = pattern;
-        nm.notify(NOTIFY_ID, n);
+        Notification notification = builder.getNotification();
 
+        notification.vibrate = pattern;
+        notification.defaults = Notification.DEFAULT_SOUND;
+
+        notification.ledARGB = Color.RED;
+        notification.ledOffMS = 0;
+        notification.ledOnMS = 1;
+        notification.flags = notification.flags | Notification.FLAG_SHOW_LIGHTS;
+
+        notificationManager.notify(NOTIFY_ID, notification);
         this.command = command;
+
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK
+                | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                | PowerManager.ON_AFTER_RELEASE, "MyWakeLock");
+        wakeLock.acquire();
     }
 
     public static String getLastCommand()

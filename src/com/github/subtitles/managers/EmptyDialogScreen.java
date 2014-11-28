@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.github.subtitles.ChatScreen;
 import com.github.subtitles.MainScreen;
 import com.github.subtitles.R;
