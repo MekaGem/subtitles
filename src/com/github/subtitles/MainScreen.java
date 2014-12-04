@@ -6,41 +6,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Switch;
-import com.github.subtitles.managers.ListenerService;
-import com.github.subtitles.view.ChatMessageModel;
+import com.github.subtitles.util.FileHelper;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
-import com.github.subtitles.view.MessagesAdapter;
 import ru.yandex.speechkit.*;
+import ru.yandex.speechkit.SpeechKit;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public class MainScreen extends Activity {
     private boolean isListening = false;
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings_button) {
-            if (isListening) {
-                stopService(new Intent(MainScreen.this, ListenerService.class));
-                isListening = false;
-            } else {
-                startService(new Intent(MainScreen.this, ListenerService.class));
-                isListening = true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    private DialogAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,18 +30,8 @@ public class MainScreen extends Activity {
         initSpeechKit();
 
         final ListView listView = (ListView) findViewById(R.id.dialogs);
-        final DialogAdapter adapter = new DialogAdapter(this);
+        adapter = new DialogAdapter(this);
         listView.setAdapter(adapter);
-
-        DialogModel dialog = new DialogModel();
-        dialog.setTitle("Вася");
-        String currentDateTimeString = new SimpleDateFormat("MM-dd HH:mm").format(new Date());
-        dialog.setDate(currentDateTimeString);
-        dialog.setLastMessage("Привет");
-        for (int index = 0; index < 15; ++index) {
-            adapter.add(dialog);
-        }
-        adapter.notifyDataSetChanged();
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -72,21 +42,17 @@ public class MainScreen extends Activity {
             }
         });
 
+        final DialogAdapter _adapter = adapter;
 
-
-//        Switch switcher = (Switch) findViewById(R.id.switcher);
-//        switcher.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                if (isListening) {
-//                    stopService(new Intent(MainScreen.this, ListenerService.class));
-//                    isListening = false;
-//                } else {
-//                    System.out.println("SDS");
-//                    startService(new Intent(MainScreen.this, ListenerService.class));
-//                    isListening = true;
-//                }
-//            }
-//        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("clicked", _adapter.getItem(position).getFilename());
+                Intent intent = new Intent(MainScreen.this, ChatScreen.class);
+                intent.putExtra(Intent.EXTRA_TITLE, _adapter.getItem(position).getFilename());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initSpeechKit() {
@@ -116,5 +82,19 @@ public class MainScreen extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.clear();
+        List<DialogModel> dialogModels = FileHelper.loadDialogs(this);
+        adapter.addAll(dialogModels);
+        adapter.notifyDataSetChanged();
+
+        for (DialogModel model : dialogModels) {
+            Log.i("DIALOG TITLE", model.getTitle());
+            Log.i("DIALOG FILE", model.getFilename());
+        }
     }
 }
