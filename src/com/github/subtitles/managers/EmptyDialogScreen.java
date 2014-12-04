@@ -38,7 +38,13 @@ public class EmptyDialogScreen extends Activity {
         });
         ad.setNegativeButton("Создать диалог", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                stopService(new Intent(context, ListenerService.class));
+                if (MainScreen.isListening())
+                {
+                    stopService(new Intent(context, ListenerService.class));
+                    MainScreen.setListening(false);
+                    MainScreen.setWasStopped(true);
+                }
+
                 Intent intent = new Intent(context, ChatScreen.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
