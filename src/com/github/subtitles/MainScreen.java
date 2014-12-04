@@ -13,8 +13,8 @@ import android.widget.ListView;
 import com.github.subtitles.util.FileHelper;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
+
 import ru.yandex.speechkit.*;
-import ru.yandex.speechkit.SpeechKit;
 
 import java.util.*;
 
