@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import com.github.subtitles.managers.ListenerService;
 import com.github.subtitles.util.FileHelper;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
@@ -19,8 +21,9 @@ import ru.yandex.speechkit.*;
 import java.util.*;
 
 public class MainScreen extends Activity {
-    private boolean isListening = false;
     private DialogAdapter adapter;
+    private static boolean isListening = false;
+    private static boolean wasStopped = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,13 @@ public class MainScreen extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainScreen.this, ChatScreen.class);
                 startActivity(intent);
+
+                if (isListening)
+                {
+                    stopService(new Intent(MainScreen.this, ListenerService.class));
+                    isListening = false;
+                    wasStopped = true;
+                }
             }
         });
 
@@ -78,6 +88,22 @@ public class MainScreen extends Activity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.settings_button) {
+            if (isListening) {
+                stopService(new Intent(MainScreen.this, ListenerService.class));
+                isListening = false;
+                item.setTitle("Голосовая активация отключена");
+            } else {
+                startService(new Intent(MainScreen.this, ListenerService.class));
+                isListening = true;
+                item.setTitle("Голосовая активация включена");
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -87,6 +113,14 @@ public class MainScreen extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (wasStopped && !isListening)
+        {
+            startService(new Intent(MainScreen.this, ListenerService.class));
+            isListening = true;
+            wasStopped = false;
+        }
+
         adapter.clear();
         List<DialogModel> dialogModels = FileHelper.loadDialogs(this);
         adapter.addAll(dialogModels);
@@ -96,5 +130,30 @@ public class MainScreen extends Activity {
             Log.i("DIALOG TITLE", model.getTitle());
             Log.i("DIALOG FILE", model.getFilename());
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (!wasStopped && isListening) {
+            stopService(new Intent(MainScreen.this, ListenerService.class));
+        }
+    }
+
+    public static  boolean isListening() {
+        return isListening;
+    }
+
+    public static void setListening(boolean bool) {
+        isListening = bool;
+    }
+
+    public static boolean isWasStopped() {
+        return wasStopped;
+    }
+
+    public static  void setWasStopped(boolean bool) {
+        wasStopped = bool;
     }
 }
