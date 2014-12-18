@@ -2,6 +2,7 @@ package com.github.subtitles;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +21,7 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 import ru.yandex.speechkit.*;
 
+import java.io.*;
 import java.util.*;
 
 public class MainScreen extends Activity {
@@ -35,6 +37,8 @@ public class MainScreen extends Activity {
         initSpeechKit();
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "5Y31eTi2hF1Cde0rqu3quWE8Z16WV1UYhIHJiRXl", "M8PtHHVnaLA5gMN3if8Eyl6HQ2flb8dhTDAllOOB");
+
+        loadFiles();
 
         final ListView listView = (ListView) findViewById(R.id.dialogs);
         adapter = new DialogAdapter(this);
@@ -142,6 +146,67 @@ public class MainScreen extends Activity {
 
         if (!wasStopped && isListening) {
             stopService(new Intent(MainScreen.this, ListenerService.class));
+        }
+    }
+
+    private void loadFiles() {
+        String dataPath = "/sdcard/data/" + getPackageName();
+        String spotterModelsPath = dataPath + "/phrase-spotter";
+
+        copyAssetFolder(getAssets(), "phrase-spotter", spotterModelsPath);
+    }
+
+    private static boolean copyAssetFolder(AssetManager assetManager,
+                                           String fromAssetPath, String toPath) {
+        Log.d("ASSETS", "copyAssetFolder: " + fromAssetPath + " -> " + toPath);
+        try {
+            String[] files = assetManager.list(fromAssetPath);
+            new File(toPath).mkdirs();
+            boolean res = true;
+            for (String file : files) {
+                if (file.contains("."))
+                    res &= copyAsset(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+                else
+                    res &= copyAssetFolder(assetManager,
+                            fromAssetPath + "/" + file,
+                            toPath + "/" + file);
+            }
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean copyAsset(AssetManager assetManager,
+                                     String fromAssetPath, String toPath) {
+        Log.d("ASSETS", "copyAsset: " + fromAssetPath + " -> " + toPath);
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(fromAssetPath);
+            new File(toPath).createNewFile();
+            out = new FileOutputStream(toPath);
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+            return true;
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
         }
     }
 
