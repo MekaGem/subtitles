@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="back_color">#FFFFCC</color>
-    <color name="menu">#6600CC</color>
+    <color name="back_color">#FFFFFF</color>
+    <color name="menu">#20103C</color>
     <color name="circle_button">#00FF00</color>
     <color name="circle_button_dark">#00AA00</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="user_message">#FFFF99</color>
-    <color name="interlocutor_message">#99CCFF</color>
+    <color name="user_message">#20103C</color>
+    <color name="interlocutor_message">#E94159</color>
+    <color name="message_text_color">#FFFFFF</color>
 </resources>

@@ -42,7 +42,7 @@ public class ChatScreen extends Activity {
 
         if (!getIntent().hasExtra(Intent.EXTRA_TITLE)) {
             String filename = String.valueOf(new Random().nextLong());
-            title = filename.substring(0, 6);
+            title = "Новый диалог";
             date = new SimpleDateFormat("MM-dd HH:mm").format(new Date());
             lastMessage = "";
             getIntent().putExtra(Intent.EXTRA_TITLE, filename);
@@ -65,9 +65,16 @@ public class ChatScreen extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView) view.findViewById(R.id.message);
                 Intent intent = new Intent(ChatScreen.this, FullScreenTextView.class);
-                intent.putExtra(Intent.EXTRA_TEXT, textView.getText());
+                String[] messages = new String[adapter.getCount()];
+                boolean[] userMessage = new boolean[adapter.getCount()];
+                for (int index = 0; index < adapter.getCount(); ++index) {
+                    messages[index] = adapter.getItem(index).getMessage();
+                    userMessage[index] = adapter.getItem(index).isUserMessage();
+                }
+                intent.putExtra(Intent.EXTRA_TEXT, messages);
+                intent.putExtra("userMessage", userMessage);
+                intent.putExtra("position", position);
                 startActivity(intent);
             }
         });

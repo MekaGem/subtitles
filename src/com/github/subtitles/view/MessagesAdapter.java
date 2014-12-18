@@ -42,12 +42,17 @@ public class MessagesAdapter extends ArrayAdapter<ChatMessageModel> {
 
         ChatMessageModel model = getItem(position);
         holder.textView.setText(model.getMessage());
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.textView.getLayoutParams();
         if (model.isUserMessage()) {
             holder.textView.setGravity(Gravity.RIGHT);
             holder.textView.setBackgroundResource(R.color.user_message);
+            params.leftMargin = params.topMargin * 3;
+            params.rightMargin = params.topMargin;
         } else {
             holder.textView.setGravity(Gravity.LEFT);
             holder.textView.setBackgroundResource(R.color.interlocutor_message);
+            params.leftMargin = params.topMargin;
+            params.rightMargin = params.topMargin * 3;
         }
         return convertView;
     }

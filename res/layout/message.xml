@@ -8,5 +8,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:textColor="@color/message_text_color"
+            android:text="Текст сообщения"
+            android:layout_margin="10dp"/>
 </RelativeLayout>
