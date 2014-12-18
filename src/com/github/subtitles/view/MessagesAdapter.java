@@ -54,6 +54,7 @@ public class MessagesAdapter extends ArrayAdapter<ChatMessageModel> {
             params.leftMargin = params.topMargin;
             params.rightMargin = params.topMargin * 3;
         }
+        holder.textView.requestLayout();
         return convertView;
     }
 }
