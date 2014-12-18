@@ -21,5 +21,5 @@
             android:id="@+id/button"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/white"
-            android:background="@drawable/awesome_button"/>
+            android:background="@color/menu"/>
 </LinearLayout>

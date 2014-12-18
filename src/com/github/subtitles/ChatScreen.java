@@ -165,6 +165,13 @@ public class ChatScreen extends Activity {
 
         adapter.clear();
         adapter.addAll(FileHelper.loadChat(this, filename));
+        if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
+            ChatMessageModel message = new ChatMessageModel();
+            message.setMessage(getIntent().getStringExtra(Intent.EXTRA_TEXT));
+            message.setUserMessage(false);
+            adapter.add(message);
+            getIntent().removeExtra(Intent.EXTRA_TEXT);
+        }
         adapter.notifyDataSetChanged();
 
         if (adapter.getCount() > 0) {

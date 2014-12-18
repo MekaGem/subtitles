@@ -2,6 +2,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/settings_button"
-          android:title="КНОПКА"
+          android:title="@string/not_listening"
           android:showAsAction="always"/>
 </menu>

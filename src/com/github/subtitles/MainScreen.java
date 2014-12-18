@@ -97,11 +97,11 @@ public class MainScreen extends Activity {
             if (isListening) {
                 stopService(new Intent(MainScreen.this, ListenerService.class));
                 isListening = false;
-                item.setTitle("Голосовая активация отключена");
+                item.setTitle(getString(R.string.not_listening));
             } else {
                 startService(new Intent(MainScreen.this, ListenerService.class));
                 isListening = true;
-                item.setTitle("Голосовая активация включена");
+                item.setTitle(getString(R.string.listening));
             }
         }
         return super.onOptionsItemSelected(item);

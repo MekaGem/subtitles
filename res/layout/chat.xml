@@ -7,6 +7,23 @@
               android:descendantFocusability="beforeDescendants"
               android:focusableInTouchMode="true">
 
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:padding="0dp">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=". . ."
+                    android:id="@+id/repeat_please"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:background="@null"
+                    android:padding="0dp"/>
+    </LinearLayout>
+
     <ListView
             android:id="@+id/messages"
             android:layout_width="match_parent"
@@ -22,7 +39,7 @@
             android:text="@string/start_recording"
             android:id="@+id/button"
             android:textSize="20dp"
-            android:background="@drawable/awesome_button"
+            android:background="@color/user_message"
             android:textColor="@color/white"/>
 
     <LinearLayout
@@ -44,7 +61,7 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Отправить"
+                android:text="Отпр."
                 android:id="@+id/submit"
                 android:textSize="20dp"
                 android:textColor="@color/white"

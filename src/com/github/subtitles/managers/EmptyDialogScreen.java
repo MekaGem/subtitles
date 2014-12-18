@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import com.github.subtitles.ChatScreen;
 import com.github.subtitles.MainScreen;
 import com.github.subtitles.R;
@@ -27,12 +28,8 @@ public class EmptyDialogScreen extends Activity {
         ad.setTitle("Внимание!");  // заголовок
         ad.setMessage("К вам только что обратились. Обращение: " +
                 NotificationController.getLastCommand());
-        ad.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+        ad.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                Intent intent = new Intent(context, MainScreen.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
                 finish();
             }
         });
@@ -45,9 +42,10 @@ public class EmptyDialogScreen extends Activity {
                     MainScreen.setWasStopped(true);
                 }
 
+                Log.i("NOTIFICATION MESSAGE", NotificationController.getLastCommand());
                 Intent intent = new Intent(context, ChatScreen.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra(Intent.EXTRA_TEXT, NotificationController.getLastCommand());
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }
