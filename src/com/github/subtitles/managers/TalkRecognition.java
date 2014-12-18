@@ -1,9 +1,11 @@
 package com.github.subtitles.managers;
 
+import android.text.Html;
 import android.util.Log;
 
 import com.github.subtitles.ChatScreen;
 
+import com.parse.ParseObject;
 import ru.yandex.speechkit.*;
 
 /**
@@ -11,6 +13,8 @@ import ru.yandex.speechkit.*;
  */
 public class TalkRecognition {
     Recognizer recognizer;
+
+    private boolean isActive = false;
 
     private ChatScreen chat;
 
@@ -23,6 +27,7 @@ public class TalkRecognition {
         recognizer = Recognizer.create("ru-RU", "freeform", new RecognizerListener() {
             @Override
             public void onRecordingBegin(Recognizer recognizer) {
+                chat.addMessage("...");
             }
 
             @Override
@@ -35,12 +40,10 @@ public class TalkRecognition {
 
             @Override
             public void onSoundDataRecorded(Recognizer recognizer, byte[] bytes) {
-
             }
 
             @Override
             public void onPowerUpdated(Recognizer recognizer, float v) {
-
             }
 
             @Override
@@ -48,10 +51,19 @@ public class TalkRecognition {
                 String message = recognition.getBestResultText();
                 if (!message.isEmpty()) {
                     if (isEndOfUtterance) {
+                        ParseObject recognizedPhrase = new ParseObject("RecognizedPhrase");
+                        recognizedPhrase.put("Text", chat.getLastMessage());
+                        recognizedPhrase.saveInBackground();
                         chat.rewriteLastMessage(message);
-                        chat.addMessage("...");
+                        if (isActive) {
+                            chat.addMessage("...");
+                        }
                     } else {
-                        chat.rewriteLastMessage(message + "...");
+                        if (isActive) {
+                            chat.rewriteLastMessage(message + "...");
+                        } else {
+                            chat.rewriteLastMessage(message);
+                        }
                     }
                 }
             }
@@ -67,10 +79,19 @@ public class TalkRecognition {
 
         recognizer.setVADEnabled(false);
         recognizer.start();
-        chat.addMessage("...");
+        isActive = true;
     }
 
     public void stop() {
         recognizer.finishRecording();
+        isActive = false;
+        if (chat.getMessagesCount() > 0) {
+            String message = chat.getLastMessage();
+            if (message == "...") {
+                chat.deleteLastMessage();
+            } else if (message.endsWith("...")) {
+                chat.rewriteLastMessage(message.substring(0, message.length() - 3));
+            }
+        }
     }
 }

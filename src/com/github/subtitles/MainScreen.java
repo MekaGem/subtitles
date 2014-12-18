@@ -16,6 +16,8 @@ import com.github.subtitles.util.FileHelper;
 import com.github.subtitles.view.DialogAdapter;
 import com.github.subtitles.view.DialogModel;
 
+import com.parse.Parse;
+import com.parse.ParseObject;
 import ru.yandex.speechkit.*;
 
 import java.util.*;
@@ -31,6 +33,8 @@ public class MainScreen extends Activity {
         setContentView(R.layout.main);
 
         initSpeechKit();
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, "5Y31eTi2hF1Cde0rqu3quWE8Z16WV1UYhIHJiRXl", "M8PtHHVnaLA5gMN3if8Eyl6HQ2flb8dhTDAllOOB");
 
         final ListView listView = (ListView) findViewById(R.id.dialogs);
         adapter = new DialogAdapter(this);

@@ -13,6 +13,7 @@ import com.github.subtitles.view.ChatMessageModel;
 import com.github.subtitles.view.DialogModel;
 import com.github.subtitles.view.FullScreenTextView;
 import com.github.subtitles.view.MessagesAdapter;
+import com.parse.ParseObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,6 +108,10 @@ public class ChatScreen extends Activity {
                     model.setUserMessage(true);
                     textField.setText("");
 
+                    ParseObject userMessage = new ParseObject("UserMessage");
+                    userMessage.put("Text", message);
+                    userMessage.saveInBackground();
+
                     adapter.add(model);
                     adapter.notifyDataSetChanged();
                 }
@@ -128,6 +133,22 @@ public class ChatScreen extends Activity {
         ChatMessageModel lastMessage = adapter.getItem(adapter.getCount() - 1);
         lastMessage.setMessage(message);
         lastMessage.setUserMessage(false);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    public String getLastMessage() {
+        ChatMessageModel lastMessage = adapter.getItem(adapter.getCount() - 1);
+        return lastMessage.getMessage();
+    }
+
+    public int getMessagesCount() {
+        return adapter.getCount();
+    }
+
+    public void deleteLastMessage() {
+        ChatMessageModel lastMessage = adapter.getItem(adapter.getCount() - 1);
+        adapter.remove(lastMessage);
 
         adapter.notifyDataSetChanged();
     }
